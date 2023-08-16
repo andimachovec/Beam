@@ -53,13 +53,13 @@
 	SelectEmailForPerson( emails)
 		-	selects one of the given emails of a person
 \*------------------------------------------------------------------------------*/
-BmString SelectEmailForPerson( const BmStringVect& emails) 
+BmString SelectEmailForPerson( const BmStringVect& emails)
 {
 	if (emails.empty())
 		return BM_DEFAULT_STRING;
 	// maybe TODO: ask user which of the given addresses should be used.
 	// However, this would be a major usability drawback, as this method is
-	// triggered by selecting one or more people files and opening them with / 
+	// triggered by selecting one or more people files and opening them with /
 	// dragging them over Beam. That's why we currently select the first mail
 	// automatically:
 	return emails[0];
@@ -67,30 +67,30 @@ BmString SelectEmailForPerson( const BmStringVect& emails)
 
 /*------------------------------------------------------------------------------*\
 	NoteOutboundAddresses()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 static void NoteOutboundAddresses( const BmAddressList& toList,
 											  const BmAddressList& ccList,
-											  const BmAddressList& bccList) 
+											  const BmAddressList& bccList)
 {
 	BmAddrList::const_iterator iter;
 	for( iter=toList.begin(); iter != toList.end(); ++iter) {
 		if (!iter->HasAddrSpec())
-			// empty group-addresses have no real address-specification 
+			// empty group-addresses have no real address-specification
 			// (like 'Undisclosed-Recipients: ;'), we filter those:
 			continue;
 		ThePeopleList->AddAsKnownAddress(iter->AddrSpec());
 	}
 	for( iter=ccList.begin(); iter != ccList.end(); ++iter) {
 		if (!iter->HasAddrSpec())
-			// empty group-addresses have no real address-specification 
+			// empty group-addresses have no real address-specification
 			// (like 'Undisclosed-Recipients: ;'), we filter those:
 			continue;
 		ThePeopleList->AddAsKnownAddress(iter->AddrSpec());
 	}
 	for( iter=bccList.begin(); iter != bccList.end(); ++iter) {
 		if (!iter->HasAddrSpec())
-			// empty group-addresses have no real address-specification 
+			// empty group-addresses have no real address-specification
 			// (like 'Undisclosed-Recipients: ;'), we filter those:
 			continue;
 		ThePeopleList->AddAsKnownAddress(iter->AddrSpec());
@@ -124,12 +124,12 @@ static BmEditWinMap nEditWinMap;
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 class BmShiftTabMsgFilter : public BMessageFilter {
 public:
 	BmShiftTabMsgFilter( BControl* stControl, uint32 cmd)
-		: 	BMessageFilter( B_ANY_DELIVERY, B_ANY_SOURCE, cmd) 
+		: 	BMessageFilter( B_ANY_DELIVERY, B_ANY_SOURCE, cmd)
 		,	mShiftTabToControl( stControl)
 	{
 	}
@@ -147,12 +147,12 @@ BMessageFilter* CreateShiftTabMsgFilter(BControl* stControl, uint32 cmd)
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 class BmPeopleDropMsgFilter : public BMessageFilter {
 public:
 	BmPeopleDropMsgFilter(uint32 cmd)
-		: 	BMessageFilter( B_DROPPED_DELIVERY, B_ANY_SOURCE, cmd) 
+		: 	BMessageFilter( B_DROPPED_DELIVERY, B_ANY_SOURCE, cmd)
 	{
 	}
 	filter_result Filter( BMessage* msg, BHandler** handler);
@@ -165,7 +165,7 @@ BMessageFilter* CreatePeopleDropMsgFilter(uint32 cmd)
 
 /*------------------------------------------------------------------------------*\
 	Filter()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 filter_result BmShiftTabMsgFilter::Filter( BMessage* msg, BHandler**) {
 	if (msg->what == B_KEY_DOWN) {
@@ -181,9 +181,9 @@ filter_result BmShiftTabMsgFilter::Filter( BMessage* msg, BHandler**) {
 
 /*------------------------------------------------------------------------------*\
 	Filter()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
-filter_result BmPeopleDropMsgFilter::Filter( BMessage* msg, 
+filter_result BmPeopleDropMsgFilter::Filter( BMessage* msg,
 															BHandler** handler) {
 	filter_result res = B_DISPATCH_MESSAGE;
 	BView* cntrl = handler ? dynamic_cast< BView*>( *handler) : NULL;
@@ -197,7 +197,7 @@ filter_result BmPeopleDropMsgFilter::Filter( BMessage* msg,
 				BmStringVect emails;
 				ThePeopleList->GetEmailsFromPeopleFile( eref, emails);
 				BmString email = SelectEmailForPerson( emails);
-				win->AddAddressToTextControl( 
+				win->AddAddressToTextControl(
 					dynamic_cast< BmTextControl*>( cntrl), email
 				);
 				res = B_SKIP_MESSAGE;
@@ -248,13 +248,13 @@ BmMailEditWin* BmMailEditWin::CreateInstance( BmMail* mail) {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 BmMailEditWin::BmMailEditWin( BmMailRef* mailRef, BmMail* mail)
-	:	inherited( "MailEditWin", BRect(50,50,800,600), "Edit mail", 
+	:	inherited( "MailEditWin", BRect(50,50,800,600), "Edit mail",
 					  ThePrefs->GetBool( "UseDocumentResizer", true)
-					  		? B_DOCUMENT_WINDOW_LOOK 
-					  		: B_TITLED_WINDOW_LOOK, 
+					  		? B_DOCUMENT_WINDOW_LOOK
+					  		: B_TITLED_WINDOW_LOOK,
 					  B_NORMAL_WINDOW_FEEL, B_ASYNCHRONOUS_CONTROLS)
 	,	mMailView( NULL)
 	,	mShowDetails1( false)
@@ -284,7 +284,7 @@ BmMailEditWin::BmMailEditWin( BmMailRef* mailRef, BmMail* mail)
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 BmMailEditWin::~BmMailEditWin() {
 	delete mAttachPanel;
@@ -301,7 +301,7 @@ BmMailEditWin::~BmMailEditWin() {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 status_t BmMailEditWin::ArchiveState( BMessage* archive) const {
 	inherited::ArchiveState( archive);
@@ -313,7 +313,7 @@ status_t BmMailEditWin::ArchiveState( BMessage* archive) const {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 status_t BmMailEditWin::UnarchiveState( BMessage* archive) {
 	status_t ret = inherited::UnarchiveState( archive);
@@ -355,7 +355,7 @@ status_t BmMailEditWin::UnarchiveState( BMessage* archive) {
 
 /*------------------------------------------------------------------------------*\
 	CreateGUI()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::CreateGUI() {
 	// Get maximum button size
@@ -367,40 +367,40 @@ void BmMailEditWin::CreateGUI() {
 
 	BBitmap* rightArrow = TheResources->IconByName("Expander_Right")->bitmap;
 	BBitmap* downArrow = TheResources->IconByName("Expander_Down")->bitmap;
-	
-	mOuterGroup = 
+
+	mOuterGroup =
 		new VGroup(
 			minimax( 200, 300, 1E5, 1E5),
 			CreateMenu(),
 			mToolbar = new BmToolbar(
 				new HGroup(
 					minimax( -1, -1, 1E5, -1),
-					mSendButton 
-						= new BmToolbarButton( 
-									"Send", 
+					mSendButton
+						= new BmToolbarButton(
+									"Send",
 									width, height,
-									new BMessage(BMM_SEND_NOW), this, 
+									new BMessage(BMM_SEND_NOW), this,
 									"Send mail now", true
 								),
-					mSaveButton 
-						= new BmToolbarButton( 
-									"Save", 
+					mSaveButton
+						= new BmToolbarButton(
+									"Save",
 									width, height,
-									new BMessage(BMM_SAVE), this, 
+									new BMessage(BMM_SAVE), this,
 									"Save mail as draft (for later use)"
 								),
-					mNewButton 
-						= new BmToolbarButton( 
-									"New", 
+					mNewButton
+						= new BmToolbarButton(
+									"New",
 									width, height,
-									new BMessage(BMM_NEW_MAIL), this, 
+									new BMessage(BMM_NEW_MAIL), this,
 									"Compose a new mail message"
 								),
-					mAttachButton 
-						= new BmToolbarButton( 
+					mAttachButton
+						= new BmToolbarButton(
 									"Attach" B_UTF8_ELLIPSIS,
 									width, height,
-									new BMessage(BMM_ATTACH), this, 
+									new BMessage(BMM_ATTACH), this,
 									"Attach a file to this mail",
 									false, "Attachment"
 								),
@@ -411,53 +411,53 @@ void BmMailEditWin::CreateGUI() {
 			new Space(minimax(-1,4,-1,4)),
 			new HGroup(
 				new Space(minimax(20,-1,20,-1)),
-				mFromControl = new BmTextControl( 
-					"From:", 
-					new BmMenuController( "From:", this, 
-												 new BMessage( BM_FROM_SET), 
+				mFromControl = new BmTextControl(
+					"From:",
+					new BmMenuController( "From:", this,
+												 new BMessage( BM_FROM_SET),
 												 &BmGuiRosterBase::RebuildIdentityMenu,
 												 BM_MC_RADIO_MODE)
 				),
-				mCharsetControl = new BmMenuControl( 
-					"Charset:", 
-					new BmMenuController( "", this, 
-												 new BMessage( BM_CHARSET_SELECTED), 
-												 &BmGuiRosterBase::RebuildCharsetMenu, 
+				mCharsetControl = new BmMenuControl(
+					"Charset:",
+					new BmMenuController( "", this,
+												 new BMessage( BM_CHARSET_SELECTED),
+												 &BmGuiRosterBase::RebuildCharsetMenu,
 												 BM_MC_LABEL_FROM_MARKED),
 					0.5
 				),
 				0
 			),
 			new HGroup(
-				mShowDetails1Button = 
-					new MPictureButton( 
-						minimax( 16,16,16,16), 
-						TheResources->CreatePictureFor( rightArrow, 16, 16), 
-						TheResources->CreatePictureFor( downArrow, 16, 16), 
+				mShowDetails1Button =
+					new MPictureButton(
+						minimax( 16,16,16,16),
+						TheResources->CreatePictureFor( rightArrow, 16, 16),
+						TheResources->CreatePictureFor( downArrow, 16, 16),
 						new BMessage( BM_SHOWDETAILS1), this, B_TWO_STATE_BUTTON
 					),
 				new Space(minimax(4,-1,4,-1)),
-				mToControl = new BmTextControl( 
-					"To:", 
-					new BmMenuController( "To:", this, 
-												 new BMessage( BM_TO_ADDED), 
+				mToControl = new BmTextControl(
+					"To:",
+					new BmMenuController( "To:", this,
+												 new BMessage( BM_TO_ADDED),
 												 &BmGuiRosterBase::RebuildPeopleMenu)
 				),
 				0
 			),
 			mDetails1Group = new VGroup(
 				new HGroup(
-					mShowDetails2Button = 
-						new MPictureButton( minimax( 16,16,16,16), 
+					mShowDetails2Button =
+						new MPictureButton( minimax( 16,16,16,16),
 							TheResources->CreatePictureFor( rightArrow, 16, 16),
-							TheResources->CreatePictureFor( downArrow, 16, 16), 
+							TheResources->CreatePictureFor( downArrow, 16, 16),
 							new BMessage( BM_SHOWDETAILS2), this, B_TWO_STATE_BUTTON
 						),
 					new Space(minimax(4,-1,4,-1)),
-					mCcControl = new BmTextControl( 
-						"Cc:", 
-						new BmMenuController( "Cc:", this, 
-													 new BMessage( BM_CC_ADDED), 
+					mCcControl = new BmTextControl(
+						"Cc:",
+						new BmMenuController( "Cc:", this,
+													 new BMessage( BM_CC_ADDED),
 													 &BmGuiRosterBase::RebuildPeopleMenu)
 					),
 					mReplyToControl = new BmTextControl( "Reply to:", false),
@@ -465,10 +465,10 @@ void BmMailEditWin::CreateGUI() {
 				),
 				mDetails2Group = new HGroup(
 					new Space(minimax(20,-1,20,-1)),
-					mBccControl = new BmTextControl( 
-						"Bcc:", 
-						new BmMenuController( "Bcc:", this, 
-													 new BMessage( BM_BCC_ADDED), 
+					mBccControl = new BmTextControl(
+						"Bcc:",
+						new BmMenuController( "Bcc:", this,
+													 new BMessage( BM_BCC_ADDED),
 													 &BmGuiRosterBase::RebuildPeopleMenu)
 					),
 					mSenderControl = new BmTextControl( "Sender:", false),
@@ -477,10 +477,10 @@ void BmMailEditWin::CreateGUI() {
 				0
 			),
 			mSubjectGroup = new HGroup(
-				mShowDetails3Button = 
-					new MPictureButton( minimax( 16,16,16,16), 
-						TheResources->CreatePictureFor( rightArrow, 16, 16), 
-						TheResources->CreatePictureFor( downArrow, 16, 16), 
+				mShowDetails3Button =
+					new MPictureButton( minimax( 16,16,16,16),
+						TheResources->CreatePictureFor( rightArrow, 16, 16),
+						TheResources->CreatePictureFor( downArrow, 16, 16),
 						new BMessage( BM_SHOWDETAILS3), this, B_TWO_STATE_BUTTON
 					),
 				new Space(minimax(4,-1,4,-1)),
@@ -490,21 +490,21 @@ void BmMailEditWin::CreateGUI() {
 			mDetails3Group = new VGroup(
 				new HGroup(
 					new Space(minimax(20,-1,20,-1)),
-					mSignatureControl = new BmMenuControl( 
-						"Signature:", 
-						new BmMenuController( 
-							"Signature:", this, 
-							new BMessage( BM_SIGNATURE_SELECTED), 
-							&BmGuiRosterBase::RebuildSignatureMenu, 
+					mSignatureControl = new BmMenuControl(
+						"Signature:",
+						new BmMenuController(
+							"Signature:", this,
+							new BMessage( BM_SIGNATURE_SELECTED),
+							&BmGuiRosterBase::RebuildSignatureMenu,
 							BM_MC_ADD_NONE_ITEM | BM_MC_LABEL_FROM_MARKED
 						)
 					),
 					new Space(minimax(20,-1,20,-1)),
-					mSmtpControl = new BmMenuControl( 
-						"SMTP-Server:", 
-						new BmMenuController( "", this, 
-													 new BMessage( BM_SMTP_SELECTED), 
-													 &BmGuiRosterBase::RebuildSmtpAccountMenu, 
+					mSmtpControl = new BmMenuControl(
+						"SMTP-Server:",
+						new BmMenuController( "", this,
+													 new BMessage( BM_SMTP_SELECTED),
+													 &BmGuiRosterBase::RebuildSmtpAccountMenu,
 													 BM_MC_LABEL_FROM_MARKED),
 						0.5
 					),
@@ -512,11 +512,11 @@ void BmMailEditWin::CreateGUI() {
 				),
 				new HGroup(
 					new Space(minimax(20,-1,20,-1)),
-					mFileIntoControl = new BmMenuControl( 
+					mFileIntoControl = new BmMenuControl(
 						"Target Folder:",
-						new BmMenuControllerBase( 
-							"out", this, 
-							new BMessage( BM_FILEINTO_SELECTED), 
+						new BmMenuControllerBase(
+							"out", this,
+							new BMessage( BM_FILEINTO_SELECTED),
 							&BmGuiRosterBase::RebuildFolderMenu
 						),
 						2.0
@@ -557,9 +557,9 @@ void BmMailEditWin::CreateGUI() {
 	);
 	mCharsetControl->ct_mpm = mSmtpControl->ct_mpm;
 
-	mShowDetails1Button->SetFlags( mShowDetails1Button->Flags() 
+	mShowDetails1Button->SetFlags( mShowDetails1Button->Flags()
 												& ~B_NAVIGABLE);
-	mShowDetails2Button->SetFlags( mShowDetails2Button->Flags() 
+	mShowDetails2Button->SetFlags( mShowDetails2Button->Flags()
 												& ~B_NAVIGABLE);
 	mShowDetails3Button->SetFlags( mShowDetails3Button->Flags()
 												& ~B_NAVIGABLE);
@@ -573,7 +573,7 @@ void BmMailEditWin::CreateGUI() {
 	mMailView->SetModificationMessage( new BMessage( BM_TEXTFIELD_MODIFIED));
 
 	// watch changes to bodypartview in order to be set the
-	// changed-flag accordingly:	
+	// changed-flag accordingly:
 	mMailView->BodyPartView()->StartWatching(
 		this, BM_NTFY_LISTCONTROLLER_MODIFIED
 	);
@@ -583,14 +583,14 @@ void BmMailEditWin::CreateGUI() {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::BeginLife() {
 }
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::MessageReceived( BMessage* msg) {
 	int32 newVal;
@@ -622,15 +622,15 @@ void BmMailEditWin::MessageReceived( BMessage* msg) {
 					int32 buttonPressed;
 					if (msg->FindInt32( "which", &buttonPressed) != B_OK) {
 						// first step, warn user about empty subject:
-						BAlert* alert = new BAlert( 
-							"Empty subject", 
+						BAlert* alert = new BAlert(
+							"Empty subject",
 							"The mail does not have a subject. Do you want to "
 							"send it anyway?",
 							"Send anyway", "Edit subject", NULL, B_WIDTH_AS_USUAL,
 							B_WARNING_ALERT
 						);
 						alert->SetShortcut( 1, B_ESCAPE);
-						alert->Go( new BInvoker( 
+						alert->Go( new BInvoker(
 							new BMessage(msg->what), BMessenger( this)
 						));
 						break;
@@ -655,43 +655,43 @@ void BmMailEditWin::MessageReceived( BMessage* msg) {
 				break;
 			}
 			case BM_TO_ADDED: {
-				AddAddressToTextControl( 
-					mToControl, 
+				AddAddressToTextControl(
+					mToControl,
 					msg->FindString( BmListModel::MSG_ITEMKEY)
 				);
 				break;
 			}
 			case BM_CC_ADDED: {
-				AddAddressToTextControl( 
-					mCcControl, 
+				AddAddressToTextControl(
+					mCcControl,
 					msg->FindString( BmListModel::MSG_ITEMKEY)
 				);
 				break;
 			}
 			case BM_BCC_ADDED: {
-				AddAddressToTextControl( 
-					mBccControl, 
+				AddAddressToTextControl(
+					mBccControl,
 					msg->FindString( BmListModel::MSG_ITEMKEY)
 				);
 				break;
 			}
 			case BM_TO_REMOVE: {
-				RemoveAddressFromTextControl( 
-					mToControl, 
+				RemoveAddressFromTextControl(
+					mToControl,
 					msg->FindString( MSG_ADDRESS)
 				);
 				break;
 			}
 			case BM_CC_REMOVE: {
-				RemoveAddressFromTextControl( 
-					mCcControl, 
+				RemoveAddressFromTextControl(
+					mCcControl,
 					msg->FindString( MSG_ADDRESS)
 				);
 				break;
 			}
 			case BM_BCC_REMOVE: {
-				RemoveAddressFromTextControl( 
-					mBccControl, 
+				RemoveAddressFromTextControl(
+					mBccControl,
 					msg->FindString( MSG_ADDRESS)
 				);
 				break;
@@ -726,7 +726,7 @@ void BmMailEditWin::MessageReceived( BMessage* msg) {
 				if (msg->FindRef( "refs", 0, &attachRef) != B_OK) {
 					// first step, let user select files to attach:
 					if (!mAttachPanel) {
-						mAttachPanel = new BFilePanel( B_OPEN_PANEL, 
+						mAttachPanel = new BFilePanel( B_OPEN_PANEL,
 																 new BMessenger(this), NULL,
 																 B_FILE_NODE, true, msg);
 					}
@@ -755,7 +755,7 @@ void BmMailEditWin::MessageReceived( BMessage* msg) {
 				BControl* source;
 				if (msg->FindPointer( "source", (void**)&source)==B_OK
 				&& source==dynamic_cast<BControl*>(mSubjectControl)) {
-					SetTitle( (BmString("Edit mail: ") 
+					SetTitle( (BmString("Edit mail: ")
 								 + mSubjectControl->Text()).String());
 				}
 				mModified = true;
@@ -797,7 +797,7 @@ void BmMailEditWin::MessageReceived( BMessage* msg) {
 					BMenuItem* currItem = item;
 					BMenu* currMenu = item->Menu();
 					BmString path;
-					while( currMenu && currItem 
+					while( currMenu && currItem
 					&& currItem!=mFileIntoControl->MenuItem()) {
 						if (!path.Length())
 							path.Prepend( BmString(currItem->Label()));
@@ -826,9 +826,9 @@ void BmMailEditWin::MessageReceived( BMessage* msg) {
 
 /*------------------------------------------------------------------------------*\
 	AddAddressToTextControl( BmTextControl* cntrl, email)
-		-	
+		-
 \*------------------------------------------------------------------------------*/
-void BmMailEditWin::AddAddressToTextControl( BmTextControl* cntrl, 
+void BmMailEditWin::AddAddressToTextControl( BmTextControl* cntrl,
 															const BmString& email) {
 	if (cntrl) {
 		BmString currStr = cntrl->Text();
@@ -844,9 +844,9 @@ void BmMailEditWin::AddAddressToTextControl( BmTextControl* cntrl,
 
 /*------------------------------------------------------------------------------*\
 	RemoveAddressFromTextControl( BmTextControl* cntrl, email)
-		-	
+		-
 \*------------------------------------------------------------------------------*/
-void BmMailEditWin::RemoveAddressFromTextControl( BmTextControl* cntrl, 
+void BmMailEditWin::RemoveAddressFromTextControl( BmTextControl* cntrl,
 																  const BmString& email) {
 	if (cntrl) {
 		BmAddressList addr( cntrl->Text());
@@ -860,7 +860,7 @@ void BmMailEditWin::RemoveAddressFromTextControl( BmTextControl* cntrl,
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 BmMailEditWin* FindMailEditWinFor( const BmString& key)
 {
@@ -873,7 +873,7 @@ BmMailEditWin* FindMailEditWinFor( const BmString& key)
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void AddMailEditWin( const BmString& key, BmMailEditWin* win)
 {
@@ -882,7 +882,7 @@ void AddMailEditWin( const BmString& key, BmMailEditWin* win)
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void RemoveMailEditWin( BmMailEditWin* win)
 {
@@ -901,10 +901,10 @@ void RemoveMailEditWin( BmMailEditWin* win)
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::RebuildPeopleMenu( BmMenuControllerBase* peopleMenu) {
-	BmMailEditWin* editWin 
+	BmMailEditWin* editWin
 		= dynamic_cast< BmMailEditWin*>( peopleMenu->MsgTarget());
 	if (!editWin)
 		return;
@@ -941,7 +941,7 @@ void BmMailEditWin::RebuildPeopleMenu( BmMenuControllerBase* peopleMenu) {
 			else
 				removeMsg = new BMessage( BM_BCC_REMOVE);
 			removeMsg->AddString( MSG_ADDRESS, (*iter).AddrString().String());
-			removeMenu->AddItem( new BMenuItem( (*iter).AddrString().String(), 
+			removeMenu->AddItem( new BMenuItem( (*iter).AddrString().String(),
 															removeMsg));
 		}
 		if (removeMenu)
@@ -960,7 +960,7 @@ void BmMailEditWin::RebuildPeopleMenu( BmMenuControllerBase* peopleMenu) {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 bool BmMailEditWin::EditHeaders( )
 {
@@ -977,12 +977,12 @@ bool BmMailEditWin::EditHeaders( )
 							(screen.Width()+w)/2,
 							(screen.Height()+h)/2);
 	BmString headerStr;
-	headerStr.ConvertLinebreaksToLF( 
+	headerStr.ConvertLinebreaksToLF(
 		&mail->Header()->HeaderString()
 	);
-	TextEntryAlert* alert = 
-		new TextEntryAlert( 
-			"Edit headers", 
+	TextEntryAlert* alert =
+		new TextEntryAlert(
+			"Edit headers",
 			"Please edit the mail headers below:",
 			headerStr.String(),
 			"Cancel",
@@ -1003,7 +1003,7 @@ bool BmMailEditWin::EditHeaders( )
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::SendMail( bool sendNow)
 {
@@ -1016,8 +1016,8 @@ void BmMailEditWin::SendMail( bool sendNow)
 	BmRef<BmMail> mail = mMailView->CurrMail();
 	if (!mail)
 		return;
-	if (mail->IsFieldEmpty( mail->IsRedirect() 
-										? BM_FIELD_RESENT_FROM 
+	if (mail->IsFieldEmpty( mail->IsRedirect()
+										? BM_FIELD_RESENT_FROM
 										: BM_FIELD_FROM)) {
 		ShowAlertWithType(
 			"You have to enter at least one address into the\n"
@@ -1026,14 +1026,14 @@ void BmMailEditWin::SendMail( bool sendNow)
 		);
 		return;
 	}
-	if (mail->IsFieldEmpty( mail->IsRedirect() 
-			? BM_FIELD_RESENT_TO 
-			: BM_FIELD_TO) 
-	&& mail->IsFieldEmpty( mail->IsRedirect() 
-			? BM_FIELD_RESENT_CC 
+	if (mail->IsFieldEmpty( mail->IsRedirect()
+			? BM_FIELD_RESENT_TO
+			: BM_FIELD_TO)
+	&& mail->IsFieldEmpty( mail->IsRedirect()
+			? BM_FIELD_RESENT_CC
 			: BM_FIELD_CC)
-	&& mail->IsFieldEmpty( mail->IsRedirect() 
-			? BM_FIELD_RESENT_BCC 
+	&& mail->IsFieldEmpty( mail->IsRedirect()
+			? BM_FIELD_RESENT_BCC
 			: BM_FIELD_BCC)) {
 		ShowAlertWithType(
 			"You have to enter at least one address into the\n"
@@ -1043,12 +1043,12 @@ void BmMailEditWin::SendMail( bool sendNow)
 		);
 		return;
 	}
-	BmRef<BmListModelItem> smtpRef 
+	BmRef<BmListModelItem> smtpRef
 		= TheSmtpAccountList->FindItemByKey( mail->AccountName());
-	BmSmtpAccount* smtpAcc 
+	BmSmtpAccount* smtpAcc
 		= dynamic_cast< BmSmtpAccount*>( smtpRef.Get());
 	if (!smtpAcc) {
-		ShowAlertWithType( 
+		ShowAlertWithType(
 			"Before you can send this mail, "
 			"you have to select the SMTP account "
 			"to use for sending it.",
@@ -1063,13 +1063,13 @@ void BmMailEditWin::SendMail( bool sendNow)
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::HandleFromSet( const BmString& from) {
-	BmRef<BmListModelItem> identRef 
+	BmRef<BmListModelItem> identRef
 		= TheIdentityList->FindItemByKey( from);
-	BmIdentity* ident 
-		= dynamic_cast< BmIdentity*>( identRef.Get()); 
+	BmIdentity* ident
+		= dynamic_cast< BmIdentity*>( identRef.Get());
 	BmRef<BmMail> mail = mMailView->CurrMail();
 	if (!ident || !mail)
 		return;
@@ -1082,7 +1082,7 @@ void BmMailEditWin::HandleFromSet( const BmString& from) {
 
 /*------------------------------------------------------------------------------*\
 	SetFieldFromMail()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::SetFieldsFromMail( BmMail* mail, BmIdentity* identity)
 {
@@ -1092,40 +1092,40 @@ void BmMailEditWin::SetFieldsFromMail( BmMail* mail, BmIdentity* identity)
 			// change any fields that do not depend on identity
 		BmString fromAddrSpec;
 		if (mail->IsRedirect()) {
-			mBccControl->SetTextSilently( 
+			mBccControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_RESENT_BCC).String());
-			mCcControl->SetTextSilently( 
+			mCcControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_RESENT_CC).String());
-			mFromControl->SetTextSilently( 
+			mFromControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_RESENT_FROM).String());
-			mSenderControl->SetTextSilently( 
+			mSenderControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_RESENT_SENDER).String());
 			if (!onlyIdentityFields)
-				mToControl->SetTextSilently( 
+				mToControl->SetTextSilently(
 								mail->GetFieldVal( BM_FIELD_RESENT_TO).String());
-			fromAddrSpec 
+			fromAddrSpec
 				= mail->Header()->GetAddressList( BM_FIELD_RESENT_FROM)
 					.FirstAddress().AddrSpec();
 		} else {
-			mBccControl->SetTextSilently( 
+			mBccControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_BCC).String());
-			mCcControl->SetTextSilently( 
+			mCcControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_CC).String());
-			mFromControl->SetTextSilently( 
+			mFromControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_FROM).String());
-			mSenderControl->SetTextSilently( 
+			mSenderControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_SENDER).String());
 			if (!onlyIdentityFields)
-				mToControl->SetTextSilently( 
+				mToControl->SetTextSilently(
 								mail->GetFieldVal( BM_FIELD_TO).String());
-			mReplyToControl->SetTextSilently( 
+			mReplyToControl->SetTextSilently(
 							mail->GetFieldVal( BM_FIELD_REPLY_TO).String());
-			fromAddrSpec 
+			fromAddrSpec
 				= mail->Header()->GetAddressList( BM_FIELD_FROM)
 					.FirstAddress().AddrSpec();
 		}
 		if (!onlyIdentityFields) {
-			mSubjectControl->SetTextSilently( 
+			mSubjectControl->SetTextSilently(
 				mail->GetFieldVal( BM_FIELD_SUBJECT).String()
 			);
 			SetTitle((BmString("Edit mail: ")+mSubjectControl->Text()).String());
@@ -1141,8 +1141,8 @@ void BmMailEditWin::SetFieldsFromMail( BmMail* mail, BmIdentity* identity)
 		}
 
 		// mark corresponding identity:
-		BmRef<BmIdentity> identRef 
-			= identity 
+		BmRef<BmIdentity> identRef
+			= identity
 				? identity
 				: TheIdentityList->FindIdentityForAddrSpec( fromAddrSpec);
 		if (identRef)
@@ -1168,7 +1168,7 @@ void BmMailEditWin::SetFieldsFromMail( BmMail* mail, BmIdentity* identity)
 			mMailView->MakeFocus( true);
 
 		// now make certain fields visible if they contain values:
-		if (BmString(mCcControl->Text()).Length() 
+		if (BmString(mCcControl->Text()).Length()
 		|| BmString(mBccControl->Text()).Length()) {
 			SetDetailsButton( 1, B_CONTROL_ON);
 		}
@@ -1180,7 +1180,7 @@ void BmMailEditWin::SetFieldsFromMail( BmMail* mail, BmIdentity* identity)
 
 /*------------------------------------------------------------------------------*\
 	EditMail()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::EditMail( BmMailRef* ref) {
 	mMailView->ShowMail( ref, false);
@@ -1191,7 +1191,7 @@ void BmMailEditWin::EditMail( BmMailRef* ref) {
 
 /*------------------------------------------------------------------------------*\
 	EditMail()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::EditMail( BmMail* mail) {
 	mMailView->ShowMail( mail, false);
@@ -1201,7 +1201,7 @@ void BmMailEditWin::EditMail( BmMail* mail) {
 
 /*------------------------------------------------------------------------------*\
 	CreateMailFromFields()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 bool BmMailEditWin::CreateMailFromFields( bool hardWrapIfNeeded) {
 	BmRef<BmMail> mail = mMailView->CurrMail();
@@ -1242,16 +1242,16 @@ bool BmMailEditWin::CreateMailFromFields( bool hardWrapIfNeeded) {
 			);
 		}
 		mail->SetFieldVal( BM_FIELD_SUBJECT, mSubjectControl->Text());
-		if (!mail->IsRedirect() 
+		if (!mail->IsRedirect()
 		&& ThePrefs->GetBool( "SetMailDateWithEverySave", true)) {
-			mail->SetFieldVal( BM_FIELD_DATE, 
-									 TimeToString( time( NULL), 
+			mail->SetFieldVal( BM_FIELD_DATE,
+									 TimeToString( time( NULL),
 														"%a, %d %b %Y %H:%M:%S %z"));
 		}
 		try {
 			bool res = mail->ConstructRawText( editedText, charset, smtpAccount);
 			if (mail->DefaultCharset() != charset) {
-				// charset has been changed by autodetection, 
+				// charset has been changed by autodetection,
 				// we select the new one:
 				charset = mail->DefaultCharset();
 				mCharsetControl->MenuItem()->SetLabel( charset.String());
@@ -1295,7 +1295,7 @@ bool BmMailEditWin::CreateMailFromFields( bool hardWrapIfNeeded) {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 MMenuBar* BmMailEditWin::CreateMenu() {
 	MMenuBar* menubar = new MMenuBar();
@@ -1304,7 +1304,7 @@ MMenuBar* BmMailEditWin::CreateMenu() {
 	menu = new BMenu( "File");
 	menu->AddItem( CreateMenuItem( "Save", BMM_SAVE, "SaveMail"));
 	menu->AddSeparatorItem();
-	AddItemToMenu( menu, CreateMenuItem( "Preferences" B_UTF8_ELLIPSIS, 
+	AddItemToMenu( menu, CreateMenuItem( "Preferences" B_UTF8_ELLIPSIS,
 						BMM_PREFERENCES), beamApp);
 	menu->AddSeparatorItem();
 	menu->AddItem( CreateMenuItem( "Close", B_QUIT_REQUESTED));
@@ -1347,7 +1347,7 @@ MMenuBar* BmMailEditWin::CreateMenu() {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailEditWin::SetDetailsButton( int32 nr, int32 newVal) {
 	switch( nr) {
@@ -1385,12 +1385,12 @@ void BmMailEditWin::SetDetailsButton( int32 nr, int32 newVal) {
 			break;
 		}
 	}
-	RecalcSize();
+	//RecalcSize();
 }
 
 /*------------------------------------------------------------------------------*\
 	SaveMail( saveForSend)
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 bool BmMailEditWin::SaveMail( bool saveForSend) {
 	if (!saveForSend && !mModified && !mHasNeverBeenSaved)
@@ -1403,7 +1403,7 @@ bool BmMailEditWin::SaveMail( bool saveForSend) {
 		if (saveForSend) {
 			// set selected folder as default and then start filter-job:
 			BMenuItem* labelItem = mFileIntoControl->MenuItem();
-			BmString destFolderName 
+			BmString destFolderName
 				= labelItem ? labelItem->Label() : BmMailFolder::OUT_FOLDER_NAME;
 			mail->SetDestFolderName( destFolderName);
 		} else {
@@ -1411,7 +1411,7 @@ bool BmMailEditWin::SaveMail( bool saveForSend) {
 			if (mail->Status() == BM_MAIL_STATUS_DRAFT)
 				mail->SetDestFolderName( BmMailFolder::DRAFT_FOLDER_NAME);
 		}
-			
+
 		if (mail->Store()) {
 			mHasNeverBeenSaved = false;
 			mModified = false;
@@ -1435,10 +1435,10 @@ bool BmMailEditWin::QuitRequested() {
 		if (IsMinimized())
 			Minimize( false);
 		Activate();
-		BAlert* alert = new BAlert( "title", 
+		BAlert* alert = new BAlert( "title",
 											 "Save mail as draft before closing?",
 											 "Cancel", "Don't save", "Save",
-											 B_WIDTH_AS_USUAL, B_OFFSET_SPACING, 
+											 B_WIDTH_AS_USUAL, B_OFFSET_SPACING,
 											 B_WARNING_ALERT);
 		alert->SetShortcut( 0, B_ESCAPE);
 		int32 result = alert->Go();
@@ -1473,9 +1473,9 @@ void BmMailEditWin::Quit() {
 
 /*------------------------------------------------------------------------------*\
 	CurrMail()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
-BmRef<BmMail> BmMailEditWin::CurrMail() const { 
+BmRef<BmMail> BmMailEditWin::CurrMail() const {
 	if (mMailView)
 		return mMailView->CurrMail();
 	else

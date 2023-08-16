@@ -102,7 +102,7 @@ void BmJobStatusView::UpdateModelView( BMessage*) {
 
 /*------------------------------------------------------------------------------*\
 	MessageReceived( msg)
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmJobStatusView::MessageReceived( BMessage* msg) {
 	try {
@@ -117,8 +117,8 @@ void BmJobStatusView::MessageReceived( BMessage* msg) {
 				break;
 			}
 			case BM_TIME_TO_SHOW: {
-				BM_LOG2( BM_LogModelController, 
-							BmString("Controller <") << ControllerName() 
+				BM_LOG2( BM_LogModelController,
+							BmString("Controller <") << ControllerName()
 								<< "> has been told to show its view");
 				BmAutolockCheckGlobal lock( TheJobStatusWin);
 				if (!lock.IsLocked())
@@ -131,8 +131,8 @@ void BmJobStatusView::MessageReceived( BMessage* msg) {
 				break;
 			}
 			case BM_TIME_TO_REMOVE: {
-				BM_LOG2( BM_LogModelController, 
-							BmString("Controller <") << ControllerName() 
+				BM_LOG2( BM_LogModelController,
+							BmString("Controller <") << ControllerName()
 								<< "> has been told to remove its view");
 				BmAutolockCheckGlobal lock( TheJobStatusWin);
 				if (!lock.IsLocked())
@@ -161,17 +161,17 @@ void BmJobStatusView::MessageReceived( BMessage* msg) {
 
 /*------------------------------------------------------------------------------*\
 	StartJob()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
-void BmJobStatusView::StartJob( BmJobModel* model, bool startInNewThread, 
+void BmJobStatusView::StartJob( BmJobModel* model, bool startInNewThread,
 										  int32 jobSpecifier) {
 	delete mShowMsgRunner;
 	mShowMsgRunner = NULL;
 	BMessage timerMsg( BM_TIME_TO_SHOW);
-	BM_LOG2( BM_LogModelController, 
-				BmString("Controller <") << ControllerName() 
+	BM_LOG2( BM_LogModelController,
+				BmString("Controller <") << ControllerName()
 					<< "> sets timer-to-show to "<<MSecsBeforeShow()<<" msecs");
-	mShowMsgRunner = new BMessageRunner( BMessenger( this), &timerMsg, 
+	mShowMsgRunner = new BMessageRunner( BMessenger( this), &timerMsg,
 													 MSecsBeforeShow(), 1);
 	inherited::StartJob( model, startInNewThread, jobSpecifier);
 }
@@ -184,25 +184,25 @@ void BmJobStatusView::StartJob( BmJobModel* model, bool startInNewThread,
 		-	deletes this job
 \*------------------------------------------------------------------------------*/
 void BmJobStatusView::JobIsDone( bool completed) {
-	BM_LOG2( BM_LogModelController, 
-				BmString("Controller <") << ControllerName() 
+	BM_LOG2( BM_LogModelController,
+				BmString("Controller <") << ControllerName()
 					<< "> has been told that job " << ModelName() << " is done");
-	int32 timeToWait 
-		= completed 
-			? (TheJobStatusWin->IsHidden() 
-				? 1 
+	int32 timeToWait
+		= completed
+			? (TheJobStatusWin->IsHidden()
+				? 1
 				: MSecsBeforeRemove())
-			: (TheJobStatusWin->IsHidden() 
-				? 1 
+			: (TheJobStatusWin->IsHidden()
+				? 1
 				: ThePrefs->GetInt("MSecsBeforeRemoveFailed", 5000*1000));
 	delete mRemoveMsgRunner;
 	mRemoveMsgRunner = NULL;
 	BMessage timerMsg( BM_TIME_TO_REMOVE);
-	BM_LOG2( BM_LogModelController, 
-				BmString("Controller <") << ControllerName() 
-					<< "> sets timer-to-remove to " << MSecsBeforeRemove() 
+	BM_LOG2( BM_LogModelController,
+				BmString("Controller <") << ControllerName()
+					<< "> sets timer-to-remove to " << MSecsBeforeRemove()
 					<< " msecs");
-	mRemoveMsgRunner = new BMessageRunner( 
+	mRemoveMsgRunner = new BMessageRunner(
 		BMessenger( this), &timerMsg, timeToWait, 1
 	);
 	BMessage jobDoneMsg(BM_JOB_DONE);
@@ -236,9 +236,9 @@ BmMailMoverView::BmMailMoverView( const char* name)
 	mMSecsBeforeShow = MAX(10,ThePrefs->GetInt( "MSecsBeforeMailMoverShows"));
 	MView* view = new VGroup(
 		new MBViewWrapper(
-			mStatBar = new BStatusBar( 
+			mStatBar = new BStatusBar(
 				BRect(), name, "Moving: ", ""
-			), 
+			),
 			true, false, false
 		),
 		new HGroup(
@@ -286,7 +286,7 @@ void BmMailMoverView::ResetController() {
 
 /*------------------------------------------------------------------------------*\
 	UpdateModelView()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailMoverView::UpdateModelView( BMessage* msg) {
 	BmString name = FindMsgString( msg, BmMailMover::MSG_MOVER);
@@ -330,13 +330,13 @@ BmMailFilterView::BmMailFilterView( const char* name)
 	,	mStatBar( NULL)
 	,	mBottomLabel( NULL)
 {
-	mMSecsBeforeShow 
+	mMSecsBeforeShow
 		= MAX(10,ThePrefs->GetInt( "MSecsBeforeMailFilterShows", 500));
 	MView* view = new HGroup(
 		new MBViewWrapper(
-			mStatBar = new BStatusBar( 
+			mStatBar = new BStatusBar(
 				BRect(), name, "Filtering: ", ""
-			), 
+			),
 			true, false, false
 		),
 		new MStop( this),
@@ -390,7 +390,7 @@ void BmMailFilterView::ResetController() {
 
 /*------------------------------------------------------------------------------*\
 	UpdateModelView()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmMailFilterView::UpdateModelView( BMessage* msg) {
 	BmString name = FindMsgString( msg, BmMailFilter::MSG_FILTER);
@@ -422,7 +422,7 @@ void BmMailFilterView::UpdateModelView( BMessage* msg) {
 	CreateInstance( name)
 		-	creates and returns a new popper-view
 \*------------------------------------------------------------------------------*/
-BmPopperView* BmPopperView::CreateInstance( const char* name, 
+BmPopperView* BmPopperView::CreateInstance( const char* name,
 														  bool isAutoCheck) {
 	return new BmPopperView( name, isAutoCheck);
 }
@@ -441,15 +441,15 @@ BmPopperView::BmPopperView( const char* name, bool isAutoCheck)
 	mMSecsBeforeRemove = MAX(10,ThePrefs->GetInt( "MSecsBeforePopperRemove"));
 	MView* view = new VGroup(
 		new MBViewWrapper(
-			mStatBar = new BStatusBar( 
+			mStatBar = new BStatusBar(
 				BRect(), name, name, ""
-			), 
+			),
 			true, false, false
 		),
 		new MBViewWrapper(
-			mMailBar = new BStatusBar( 
+			mMailBar = new BStatusBar(
 				BRect(), name, "Mails: ", ""
-			), 
+			),
 			true, false, false
 		),
 		0
@@ -494,7 +494,7 @@ void BmPopperView::ResetController() {
 
 /*------------------------------------------------------------------------------*\
 	UpdateModelView()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmPopperView::UpdateModelView( BMessage* msg) {
 	BmString name = FindMsgString( msg, BmPopper::MSG_MODEL);
@@ -530,7 +530,7 @@ void BmPopperView::UpdateModelView( BMessage* msg) {
 		} else if (domain == "mailbar.cleanup") {
 			mMailBar->SetBarColor(BM_MAIL_DELETE_COLOR);
 			mMailBar->Update( delta, leading, trailing);
-		} else { 
+		} else {
 			// domain == "statbar"
 			mStatBar->Update( delta, leading, trailing);
 			rgb_color newBarColor = mStatBar->BarColor();
@@ -558,7 +558,7 @@ void BmPopperView::UpdateModelView( BMessage* msg) {
 	CreateInstance( name)
 		-	creates and returns a new imap-view
 \*------------------------------------------------------------------------------*/
-BmImapView* BmImapView::CreateInstance( const char* name, 
+BmImapView* BmImapView::CreateInstance( const char* name,
 													 bool isAutoCheck) {
 	return new BmImapView( name, isAutoCheck);
 }
@@ -577,15 +577,15 @@ BmImapView::BmImapView( const char* name, bool isAutoCheck)
 	mMSecsBeforeRemove = MAX(10,ThePrefs->GetInt( "MSecsBeforePopperRemove"));
 	MView* view = new VGroup(
 		new MBViewWrapper(
-			mStatBar = new BStatusBar( 
+			mStatBar = new BStatusBar(
 				BRect(), name, name, ""
-			), 
+			),
 			true, false, false
 		),
 		new MBViewWrapper(
-			mMailBar = new BStatusBar( 
+			mMailBar = new BStatusBar(
 				BRect(), name, "Mails: ", ""
-			), 
+			),
 			true, false, false
 		),
 		0
@@ -630,7 +630,7 @@ void BmImapView::ResetController() {
 
 /*------------------------------------------------------------------------------*\
 	UpdateModelView()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmImapView::UpdateModelView( BMessage* msg) {
 	BmString name = FindMsgString( msg, BmImap::MSG_MODEL);
@@ -666,7 +666,7 @@ void BmImapView::UpdateModelView( BMessage* msg) {
 		} else if (domain == "mailbar.cleanup") {
 			mMailBar->SetBarColor(BM_MAIL_DELETE_COLOR);
 			mMailBar->Update( delta, leading, trailing);
-		} else { 
+		} else {
 			// domain == "statbar"
 			mStatBar->Update( delta, leading, trailing);
 			rgb_color newBarColor = mStatBar->BarColor();
@@ -710,15 +710,15 @@ BmSmtpView::BmSmtpView( const char* name)
 	mMSecsBeforeRemove = MAX(10,ThePrefs->GetInt( "MSecsBeforeSmtpRemove"));
 	MView* view = new VGroup(
 		new MBViewWrapper(
-			mStatBar = new BStatusBar( 
+			mStatBar = new BStatusBar(
 				BRect(), name, (BmString("SMTP: ")<<name).String(), ""
-			), 
+			),
 			true, false, false
 		),
 		new MBViewWrapper(
-			mMailBar = new BStatusBar( 
+			mMailBar = new BStatusBar(
 				BRect(), name, "Mails: ", ""
-			), 
+			),
 			true, false, false
 		),
 		0
@@ -765,7 +765,7 @@ void BmSmtpView::ResetController() {
 
 /*------------------------------------------------------------------------------*\
 	UpdateModelView()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 void BmSmtpView::UpdateModelView( BMessage* msg) {
 	BmString name = FindMsgString( msg, BmSmtp::MSG_MODEL);
@@ -787,7 +787,7 @@ void BmSmtpView::UpdateModelView( BMessage* msg) {
 	if (lock.IsLocked()) {
 		if (domain == "mailbar") {
 			mMailBar->Update( delta, leading, trailing);
-		} else { 
+		} else {
 			// domain == "statbar"
 			mStatBar->Update( delta, leading, trailing);
 			rgb_color newBarColor = mStatBar->BarColor();
@@ -827,7 +827,7 @@ BmJobStatusWin* BmJobStatusWin::theInstance = NULL;
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 BmJobStatusWin* BmJobStatusWin::CreateInstance() {
 	if (!theInstance) {
@@ -842,15 +842,15 @@ BmJobStatusWin* BmJobStatusWin::CreateInstance() {
 		-	constructor, creates outer view that will take up the job-interfaces
 \*------------------------------------------------------------------------------*/
 BmJobStatusWin::BmJobStatusWin()
-	:	BmWindow( "JobStatusWindow", 
-					BRect(beamApp->ScreenFrame().right-BM_MINSIZE-4,20,0,0), 
+	:	BmWindow( "JobStatusWindow",
+					BRect(beamApp->ScreenFrame().right-BM_MINSIZE-4,20,0,0),
 					"Jobs",
 					B_FLOATING_WINDOW_LOOK, B_NORMAL_WINDOW_FEEL,
 					B_ASYNCHRONOUS_CONTROLS	|	B_NOT_ZOOMABLE	|	B_NOT_V_RESIZABLE
-					| B_NO_WORKSPACE_ACTIVATION 
+					| B_NO_WORKSPACE_ACTIVATION
 					| (mouse_mode()==B_NORMAL_MOUSE ? B_AVOID_FOCUS : 0))
-{ 
-	mOuterGroup = 
+{
+	mOuterGroup =
 		new VGroup(
 			new Space( minimax( BM_MINSIZE,0,1E5,1E5,1)),
 			0
@@ -880,7 +880,7 @@ bool BmJobStatusWin::QuitRequested() {
 		BM_THROW_RUNTIME( "QuitRequested(): could not lock window");
 	while( !IsHidden())
 		Hide();
-	BM_LOG2( BM_LogJobWin, 
+	BM_LOG2( BM_LogJobWin,
 				"JobStatusWin has been asked to quit; stopping all jobs");
 	JobMap::iterator iter;
 	for( iter = mActiveJobs.begin(); iter != mActiveJobs.end(); ++iter) {
@@ -906,7 +906,7 @@ void BmJobStatusWin::Quit() {
 /*------------------------------------------------------------------------------*\
 	MessageReceived( msg)
 		-	handles messages sent from Application (job requests)
-			and messages sent from jobs (update-requests and 
+			and messages sent from jobs (update-requests and
 			finished-triggers)
 \*------------------------------------------------------------------------------*/
 void BmJobStatusWin::MessageReceived(BMessage* msg) {
@@ -981,7 +981,7 @@ void BmJobStatusWin::QueueJob( BMessage* msg) {
 /*------------------------------------------------------------------------------*\
 	AddJob( msg)
 		-	adds a new job-interface to this window
-		-	the necessary BmJobStatusView-object will be created and its 
+		-	the necessary BmJobStatusView-object will be created and its
 			corresponding BmJobModel will be started (in a new thread).
 		-	if job is already active, it is left alone (nothing happens)
 \*------------------------------------------------------------------------------*/
@@ -1040,7 +1040,7 @@ void BmJobStatusWin::AddJob( BMessage* msg) {
 	BRect frame = controller->Frame();
 	float height = frame.bottom+2;
 	ResizeTo( Frame().Width(), height);
-	RecalcSize();
+	//RecalcSize();
 	// ...and add the interface to the map:
 	mActiveJobs[name] = controller;
 
@@ -1055,7 +1055,7 @@ void BmJobStatusWin::AddJob( BMessage* msg) {
 /*------------------------------------------------------------------------------*\
 	RemoveJob( name)
 		-	removes a job and its administrative info
-		-	the decision about whether or not to remove the interface, too, 
+		-	the decision about whether or not to remove the interface, too,
 			depends on the mode of the job-window:
 			*	DYNAMIC:			always remove interface
 			*	STATIC:			never remove interface
@@ -1072,13 +1072,13 @@ void BmJobStatusWin::RemoveJob( const char* name) {
 	JobMap::iterator interfaceIter = mDoneJobs.find(name);
 	if (interfaceIter == mDoneJobs.end())
 		return;
-	
+
 	BmJobStatusView* controller = (*interfaceIter).second;
 	if (controller) {
 		BRect rect = controller->Bounds();
 		mOuterGroup->RemoveChild( controller);
 		ResizeBy( 0, -1-(rect.Height()));
-		RecalcSize();
+		//RecalcSize();
 		mDoneJobs.erase( controller->ControllerName());
 
 		if (mActiveJobs.empty()) {

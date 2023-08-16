@@ -12,12 +12,12 @@
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 class BmScrollWheelFilter : public BMessageFilter {
 public:
 	BmScrollWheelFilter()
-		: 	BMessageFilter( B_ANY_DELIVERY, B_ANY_SOURCE, B_MOUSE_WHEEL_CHANGED) 
+		: 	BMessageFilter( B_ANY_DELIVERY, B_ANY_SOURCE, B_MOUSE_WHEEL_CHANGED)
 	{
 	}
 	filter_result Filter( BMessage* msg, BHandler** handler);
@@ -26,9 +26,9 @@ private:
 
 /*------------------------------------------------------------------------------*\
 	Filter()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
-filter_result BmScrollWheelFilter::Filter( BMessage* msg, 
+filter_result BmScrollWheelFilter::Filter( BMessage* msg,
 														 BHandler** handler) {
 	bool passedOn = false;
 	msg->FindBool("bm:passed_on", &passedOn);
@@ -49,10 +49,10 @@ const char* const BmWindow::MSG_FRAME = 	"bm:frm";
 \*------------------------------------------------------------------------------*/
 BmWindow::BmWindow( const char* statefileName, BRect frame, const char* title,
 						  window_look look, window_feel feel, uint32 flags)
-	:	MWindow( frame, title, look, feel, flags)
+	:	BWindow( frame, title, look, feel, flags)
 	,	mStatefileName( statefileName)
 	,	mLifeHasBegun( false)
-{ 
+{
 	AddCommonFilter( new BmScrollWheelFilter());
 }
 
@@ -65,7 +65,7 @@ BmWindow::~BmWindow() {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 status_t BmWindow::ArchiveState( BMessage* archive) const {
 	BRect frame = Frame();
@@ -76,7 +76,7 @@ status_t BmWindow::ArchiveState( BMessage* archive) const {
 
 /*------------------------------------------------------------------------------*\
 	()
-		-	
+		-
 \*------------------------------------------------------------------------------*/
 status_t BmWindow::UnarchiveState( BMessage* archive) {
 	BRect frame;
@@ -114,8 +114,8 @@ bool BmWindow::ReadStateInfo() {
 		try {
 			BMessage archive;
 			if ((err = archive.Unflatten( &winFile)) != B_OK)
-				BM_THROW_RUNTIME( 
-					BmString("Could not fetch window archive from file\n\t<") 
+				BM_THROW_RUNTIME(
+					BmString("Could not fetch window archive from file\n\t<")
 						<< mStatefileName << ">\n\n Result: " << strerror(err)
 				);
 			UnarchiveState( &archive);
@@ -139,18 +139,18 @@ bool BmWindow::WriteStateInfo() {
 	try {
 		if (this->ArchiveState( &archive) != B_OK)
 			BM_THROW_RUNTIME("Unable to archive Window-object");
-		if ((err = cacheFile.SetTo( 
-			BeamRoster->StateInfoFolder(), 
-			mStatefileName.String(), 
+		if ((err = cacheFile.SetTo(
+			BeamRoster->StateInfoFolder(),
+			mStatefileName.String(),
 			B_WRITE_ONLY | B_CREATE_FILE | B_ERASE_FILE
 		)) != B_OK)
-			BM_THROW_RUNTIME( 
-				BmString("Could not create cache file\n\t<") << mStatefileName 
+			BM_THROW_RUNTIME(
+				BmString("Could not create cache file\n\t<") << mStatefileName
 					<< ">\n\n Result: " << strerror(err)
 			);
 		if ((err = archive.Flatten( &cacheFile)) != B_OK)
-			BM_THROW_RUNTIME( 
-				BmString("Could not store state-cache into file\n\t<") 
+			BM_THROW_RUNTIME(
+				BmString("Could not store state-cache into file\n\t<")
 					<< mStatefileName << ">\n\n Result: " << strerror(err)
 			);
 	} catch( BM_error &e) {
@@ -198,10 +198,10 @@ void BmWindow::Quit() {
 void BmWindow::MessageReceived( BMessage* msg) {
 	switch( msg->what) {
 		case B_COPY:
-		case B_CUT: 
-		case B_PASTE: 
-		case B_UNDO: 
-		case 'REDO': 
+		case B_CUT:
+		case B_PASTE:
+		case B_UNDO:
+		case 'REDO':
 		case B_SELECT_ALL:
 		case B_MODIFIERS_CHANGED: {
 			bool seenThis;

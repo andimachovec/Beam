@@ -14,11 +14,11 @@
 #ifdef B_BEOS_VERSION_DANO
 	class BPopUpMenu;
 #endif
-#include <MWindow.h>
+#include <Window.h>
 
-class BmWindow : public MWindow
+class BmWindow : public BWindow
 {
-	typedef MWindow inherited;
+	typedef BWindow inherited;
 
 	static const char* const MSG_FRAME;
 
@@ -39,7 +39,7 @@ public:
 	void Quit();
 	void Show();
 	void MessageReceived( BMessage*);
-	
+
 protected:
 	BmString mStatefileName;
 	bool mLifeHasBegun;
